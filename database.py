@@ -1,4 +1,12 @@
 import sqlite3
+from dataclasses import dataclass
+
+
+@dataclass
+class Note:
+    id: int = None
+    title: str = None
+    content: str = ''
 
 
 class Database:
@@ -11,3 +19,10 @@ class Database:
                 content TEXT NOT NULL
             )
         ''')
+
+    def add(self, note):
+        self.conn.execute(
+            'INSERT INTO note (title, content) VALUES (?, ?)',
+            (note.title, note.content)
+        )
+        self.conn.commit()
