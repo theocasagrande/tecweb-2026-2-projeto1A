@@ -30,3 +30,10 @@ class Database:
     def get_all(self):
         cursor = self.conn.execute('SELECT id, title, content FROM note')
         return [Note(id=linha[0], title=linha[1], content=linha[2]) for linha in cursor]
+
+    def update(self, entry):
+        self.conn.execute(
+            'UPDATE note SET title = ?, content = ? WHERE id = ?',
+            (entry.title, entry.content, entry.id)
+        )
+        self.conn.commit()
