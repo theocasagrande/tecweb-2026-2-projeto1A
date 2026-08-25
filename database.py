@@ -37,3 +37,7 @@ class Database:
             (entry.title, entry.content, entry.id)
         )
         self.conn.commit()
+
+    def delete(self, note_id):
+        self.conn.execute('DELETE FROM note WHERE id = ?', (note_id,))
+        self.conn.commit()

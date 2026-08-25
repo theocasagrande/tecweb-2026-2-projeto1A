@@ -16,3 +16,9 @@ db.update(segunda_nota)
 print('Após o update:')
 for note in db.get_all():
     print(f'Anotação {note.id}:\n  Título: {note.title}\n  Conteúdo: {note.content}\n')
+
+db.delete(notes[0].id)
+
+print('Após o delete:')
+for note in db.get_all():
+    print(f'Anotação {note.id}:\n  Título: {note.title}\n  Conteúdo: {note.content}\n')
