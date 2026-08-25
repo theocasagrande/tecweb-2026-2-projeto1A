@@ -26,3 +26,7 @@ class Database:
             (note.title, note.content)
         )
         self.conn.commit()
+
+    def get_all(self):
+        cursor = self.conn.execute('SELECT id, title, content FROM note')
+        return [Note(id=linha[0], title=linha[1], content=linha[2]) for linha in cursor]
