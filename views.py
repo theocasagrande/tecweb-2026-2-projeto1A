@@ -34,3 +34,16 @@ def confirm_delete(note_id):
 def delete_note(note_id):
     db.delete(int(note_id))
     return REDIRECT_HOME
+
+def edit_note_page(note_id):
+    nota = db.get_by_id(int(note_id))
+    body = load_template('edit.html').format(
+        id=nota.id, title=nota.title, details=nota.content
+    )
+    return build_response(body=body)
+
+def save_note_edit(request, note_id):
+    params = parse_post_params(request)
+    entry = Note(id=int(note_id), title=params['titulo'], content=params['detalhes'])
+    db.update(entry)
+    return REDIRECT_HOME
