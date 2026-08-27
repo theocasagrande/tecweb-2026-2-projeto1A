@@ -47,3 +47,7 @@ def save_note_edit(request, note_id):
     entry = Note(id=int(note_id), title=params['titulo'], content=params['detalhes'])
     db.update(entry)
     return REDIRECT_HOME
+
+def not_found():
+    body = load_template('404.html')
+    return build_response(code=404, reason='Not Found', body=body)

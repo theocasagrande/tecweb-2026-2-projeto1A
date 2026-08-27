@@ -302,3 +302,29 @@ body {
   text-align: center;
   flex: 1;
 }
+
+.not-found {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.not-found-illustration {
+  margin-bottom: 0.5rem;
+}
+
+.not-found-title {
+  font-family: "Permanent Marker", cursive;
+  font-size: 3rem;
+  color: #2c2c2c;
+}
+
+.not-found-message {
+  font-family: "Roboto", sans-serif;
+  font-size: 1rem;
+  color: #4c4c4c;
+  max-width: 25rem;
+}

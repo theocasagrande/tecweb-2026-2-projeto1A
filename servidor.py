@@ -1,7 +1,7 @@
 import socket
 from pathlib import Path
 from utils import extract_route, extract_method, read_file, build_response, guess_content_type
-from views import index, create_note, confirm_delete, delete_note, edit_note_page, save_note_edit
+from views import index, create_note, confirm_delete, delete_note, edit_note_page, save_note_edit, not_found
 
 
 CUR_DIR = Path(__file__).parent
@@ -50,7 +50,7 @@ try:
         elif prefixo == 'edit' and note_id and method == 'POST':
             response = save_note_edit(request, note_id)
         else:
-            response = build_response(code=404, reason='Not Found')
+            response = not_found()
 
         client_connection.sendall(response)
 
