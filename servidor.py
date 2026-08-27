@@ -1,6 +1,6 @@
 import socket
 from pathlib import Path
-from utils import extract_route, read_file, build_response
+from utils import extract_route, read_file, build_response, guess_content_type
 from views import index
 
 
@@ -20,13 +20,17 @@ while True:
     client_connection, client_address = server_socket.accept()
 
     request = client_connection.recv(1024).decode()
+    if not request:
+        client_connection.close()
+        continue
     print('*'*100)
     print(request)
 
     route = extract_route(request)
     filepath = CUR_DIR / route
     if filepath.is_file():
-        response = build_response() + read_file(filepath)
+        headers = f'Content-Type: {guess_content_type(filepath)}'
+        response = build_response(headers=headers) + read_file(filepath)
     elif route == '':
         response = index(request)
     else:

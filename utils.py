@@ -1,5 +1,17 @@
 import json
 
+CONTENT_TYPES = {
+    '.html': 'text/html',
+    '.css': 'text/css',
+    '.js': 'text/javascript',
+    '.png': 'image/png',
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.gif': 'image/gif',
+    '.svg': 'image/svg+xml',
+}
+def guess_content_type(path):
+    return CONTENT_TYPES.get(path.suffix, 'application/octet-stream')
 def extract_route(request):
     separado = request.split()
     route = separado[1]
