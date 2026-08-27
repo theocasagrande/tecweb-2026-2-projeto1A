@@ -254,7 +254,18 @@ body {
   top: 0.3rem;
   right: 0.4rem;
   display: flex;
+  align-items: center;
   gap: 0.4rem;
+}
+
+.favorite-form {
+  margin: 0;
+  line-height: 1;
+}
+
+.favorite-btn {
+  color: #e0af26;
+  font-size: 1.1rem;
 }
 
 .btn-icon {

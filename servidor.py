@@ -1,7 +1,10 @@
 import socket
 from pathlib import Path
 from utils import extract_route, extract_method, read_file, build_response, guess_content_type
-from views import index, create_note, confirm_delete, delete_note, edit_note_page, save_note_edit, not_found
+from views import (
+    index, create_note, confirm_delete, delete_note,
+    edit_note_page, save_note_edit, toggle_favorite, not_found,
+)
 
 
 CUR_DIR = Path(__file__).parent
@@ -49,6 +52,8 @@ try:
             response = edit_note_page(note_id)
         elif prefixo == 'edit' and note_id and method == 'POST':
             response = save_note_edit(request, note_id)
+        elif prefixo == 'favorite' and note_id and method == 'POST':
+            response = toggle_favorite(note_id)
         else:
             response = not_found()
 

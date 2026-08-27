@@ -10,7 +10,12 @@ def render_notes():
     # Se tiver curiosidade: https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions
     note_template = load_template('components/note.html')
     cards = [
-        note_template.format(id=nota.id, title=nota.title, details=nota.content)
+        note_template.format(
+            id=nota.id,
+            title=nota.title,
+            details=nota.content,
+            favorite_icon='★' if nota.favorite else '☆',
+        )
         for nota in db.get_all()
     ]
     return '\n'.join(cards)
@@ -46,6 +51,10 @@ def save_note_edit(request, note_id):
     params = parse_post_params(request)
     entry = Note(id=int(note_id), title=params['titulo'], content=params['detalhes'])
     db.update(entry)
+    return REDIRECT_HOME
+
+def toggle_favorite(note_id):
+    db.toggle_favorite(int(note_id))
     return REDIRECT_HOME
 
 def not_found():

@@ -4,6 +4,9 @@
         <p>{details}</p>
       </div>
       <div class="card-actions">
+        <form method="post" action="/favorite/{id}" class="favorite-form">
+          <button class="btn-icon favorite-btn" type="submit" title="Favoritar">{favorite_icon}</button>
+        </form>
         <a class="btn-icon" href="/edit/{id}" title="Editar">✎</a>
         <a class="btn-icon" href="/delete/{id}" title="Excluir">🗑</a>
       </div>
