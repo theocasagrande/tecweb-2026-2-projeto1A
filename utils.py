@@ -1,3 +1,5 @@
+from urllib.parse import unquote_plus
+
 CONTENT_TYPES = {
     '.html': 'text/html',
     '.css': 'text/css',
@@ -14,6 +16,16 @@ def extract_route(request):
     separado = request.split()
     route = separado[1]
     return route[1:]
+def extract_method(request):
+    return request.split()[0]
+def parse_post_params(request):
+    request = request.replace('\r', '')
+    corpo = request.split('\n\n')[1]
+    params = {}
+    for chave_valor in corpo.split('&'):
+        chave, valor = chave_valor.split('=')
+        params[chave] = unquote_plus(valor)
+    return params
 def read_file(path):
     with open(path, 'rb') as f:
         return f.read()

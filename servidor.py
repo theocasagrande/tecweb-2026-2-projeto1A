@@ -1,7 +1,7 @@
 import socket
 from pathlib import Path
-from utils import extract_route, read_file, build_response, guess_content_type
-from views import index
+from utils import extract_route, extract_method, read_file, build_response, guess_content_type
+from views import index, create_note, confirm_delete, delete_note
 
 
 CUR_DIR = Path(__file__).parent
@@ -26,13 +26,24 @@ while True:
     print('*'*100)
     print(request)
 
+    method = extract_method(request)
     route = extract_route(request)
     filepath = CUR_DIR / route
+    segmentos = route.split('/')
+    prefixo = segmentos[0]
+    note_id = segmentos[1] if len(segmentos) > 1 else None
+
     if filepath.is_file():
         headers = f'Content-Type: {guess_content_type(filepath)}'
         response = build_response(headers=headers) + read_file(filepath)
-    elif route == '':
+    elif route == '' and method == 'GET':
         response = index(request)
+    elif route == '' and method == 'POST':
+        response = create_note(request)
+    elif prefixo == 'delete' and note_id and method == 'GET':
+        response = confirm_delete(note_id)
+    elif prefixo == 'delete' and note_id and method == 'POST':
+        response = delete_note(note_id)
     else:
         response = build_response(code=404, reason='Not Found')
 
