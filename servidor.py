@@ -1,6 +1,6 @@
 import socket
 from pathlib import Path
-from utils import extract_route, extract_method, read_file, build_response, guess_content_type
+from utils import extract_route, extract_method, read_file, read_request, build_response, guess_content_type
 from views import (
     index, create_note, confirm_delete, delete_note,
     edit_note_page, save_note_edit, toggle_favorite, not_found,
@@ -23,7 +23,13 @@ try:
     while True:
         client_connection, client_address = server_socket.accept()
 
-        request = client_connection.recv(1024).decode()
+        client_connection.settimeout(5)
+        try:
+            request = read_request(client_connection)
+        except socket.timeout:
+            client_connection.close()
+            continue
+
         if not request:
             client_connection.close()
             continue
@@ -35,7 +41,7 @@ try:
         filepath = CUR_DIR / route
         segmentos = route.split('/')
         prefixo = segmentos[0]
-        note_id = segmentos[1] if len(segmentos) > 1 else None
+        note_id = segmentos[1] if len(segmentos) > 1 and segmentos[1].isdigit() else None
 
         if filepath.is_file():
             headers = f'Content-Type: {guess_content_type(filepath)}'

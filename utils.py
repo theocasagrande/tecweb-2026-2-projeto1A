@@ -3,7 +3,6 @@ from urllib.parse import unquote_plus
 CONTENT_TYPES = {
     '.html': 'text/html',
     '.css': 'text/css',
-    '.js': 'text/javascript',
     '.png': 'image/png',
     '.jpg': 'image/jpeg',
     '.jpeg': 'image/jpeg',
@@ -18,11 +17,26 @@ def extract_route(request):
     return route[1:]
 def extract_method(request):
     return request.split()[0]
+def extract_body(request):
+    partes = request.replace('\r', '').split('\n\n', 1)
+    return partes[1] if len(partes) > 1 else ''
+def content_length(request):
+    for linha in request.replace('\r', '').split('\n'):
+        if linha.lower().startswith('content-length:'):
+            return int(linha.split(':', 1)[1])
+    return 0
+def read_request(connection):
+    request = connection.recv(1024).decode()
+    if not request:
+        return request
+
+    tamanho = content_length(request)
+    while len(extract_body(request)) < tamanho:
+        request += connection.recv(1024).decode()
+    return request
 def parse_post_params(request):
-    request = request.replace('\r', '')
-    corpo = request.split('\n\n')[1]
     params = {}
-    for chave_valor in corpo.split('&'):
+    for chave_valor in extract_body(request).split('&'):
         chave, valor = chave_valor.split('=')
         params[chave] = unquote_plus(valor)
     return params
